@@ -5,17 +5,14 @@
 {% block body %}
 
 <div >
-    <h2>
-        Title:
-        {{ pfe.title}}
-    </h2>
-    <h2>
-        Student:
-        {{ pfe.student}}
-    </h2>
-    <h2>
-        Entreprise:
-        {{ pfe.entreprise}}
-    </h2>
+    <div class="card text-white bg-primary mb-3">
+        <div class="card-header">
+            <h3>{{ pfe.title }}</h3>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Student: {{ pfe.student }}</h5>
+            <p class="card-text">Etp. :{{ pfe.entreprise }}</p>
+
+    </div>
 </div>
 {% endblock %}

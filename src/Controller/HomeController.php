@@ -20,10 +20,17 @@ class HomeController extends AbstractController
     public function index(): Response
     {
         $entreprises = $this->repository->findAll();
+        $counts = [];
         //get count of pfe for each entreprise
-        
+        foreach ($entreprises as $entreprise) {
+            $count = $this->manager->createQuery('SELECT COUNT(p) FROM App\Entity\Pfe p WHERE p.entreprise = :entreprise')
+                ->setParameter('entreprise', $entreprise)
+                ->getSingleScalarResult();
+            $counts[$entreprise->getId()] = $count;
+        }
         return $this->render('home/index.html.twig', [
             'entreprises' => $entreprises,
+            'counts' => $counts
         ]);
     }
 }

@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request ;
 
 class PFEController extends AbstractController
 {
@@ -30,18 +31,19 @@ class PFEController extends AbstractController
         ]);
     }
 
-    #[Route('/pfe/form/{id?0}', name:'app_pfeform')]
-    public function form(PFE $pfe=null)
+    #[Route('/pfeform/{id?0}', name:'app_pfe.form')]
+    public function form(Request $request, PFE $pfe=null): Response
     {
         $pfe = $pfe ? $pfe : new PFE();
         $form = $this->createForm(PFEType::class, $pfe);
         $form->add('submit', SubmitType::class);
 
-        $form->handleRequest($this->getRequest());
+        $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
             $this->manager->persist($pfe);
             $this->manager->flush();
+            return $this->redirectToRoute('app_pfe', ['id' => $pfe->getId()]);
         }
         return $this->render('pfe/form.html.twig', [
             'form' => $form->createView(),
